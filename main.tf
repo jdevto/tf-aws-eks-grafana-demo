@@ -25,6 +25,8 @@ module "eks" {
   aws_auth_map_users            = var.aws_auth_map_users
   aws_auth_map_roles            = var.aws_auth_map_roles
   shared_alb_allowed_ips        = var.shared_alb_allowed_ips
+
+  depends_on = [module.vpc]
 }
 
 module "route53_platform" {
@@ -51,7 +53,10 @@ module "landing_page" {
   ssl_redirect                  = var.enable_https
   grafana_path_prefix           = "/grafana"
 
-  depends_on = [module.eks]
+  depends_on = [
+    module.eks,
+    module.vpc
+  ]
 }
 
 module "grafana" {
@@ -67,5 +72,8 @@ module "grafana" {
   shared_alb_security_group_id  = module.eks.shared_alb_security_group_id
   domain_name                   = var.domain_name
 
-  depends_on = [module.eks]
+  depends_on = [
+    module.eks,
+    module.vpc
+  ]
 }
