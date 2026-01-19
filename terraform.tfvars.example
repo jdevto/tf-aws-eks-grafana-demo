@@ -1,0 +1,39 @@
+# Example terraform.tfvars file with fictitious values
+# Copy this file to terraform.tfvars and update with your actual values
+
+domain_name       = "example.com"
+enable_https      = true
+certificate_arn   = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+enable_shared_alb = true
+
+# Map IAM roles to Kubernetes users/groups
+aws_auth_map_roles = [
+  {
+    rolearn  = "arn:aws:iam::123456789012:role/eks-admin-role"
+    username = "eks-admin"
+    groups   = ["system:masters"]
+  },
+  {
+    rolearn  = "arn:aws:iam::123456789012:role/eks-readonly-role"
+    username = "eks-readonly"
+    groups   = ["system:viewers"]
+  }
+]
+
+# Map IAM users to Kubernetes users/groups
+aws_auth_map_users = [
+  {
+    userarn  = "arn:aws:iam::123456789012:user/john.doe"
+    username = "john.doe"
+    groups   = ["system:masters"]
+  },
+  {
+    userarn  = "arn:aws:iam::123456789012:user/jane.smith"
+    username = "jane.smith"
+    groups   = ["system:viewers"]
+  }
+]
+
+# List of CIDR blocks allowed to access the shared ALB
+# Use ["0.0.0.0/0"] to allow all IPs (not recommended for production)
+shared_alb_allowed_ips = ["203.0.113.0/24", "198.51.100.0/24"]
